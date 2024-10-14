@@ -16,6 +16,8 @@ public class UserDto {
     private String phone;
     private Role role;
     private String roleName;
+    private String confirmationToken;
+    private String email;
 
     public UserDto(UUID id, String firstName, String phone, Role role) {
         this.id = id;

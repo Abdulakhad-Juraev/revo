@@ -29,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query(nativeQuery = true, value = "select * from users where role_id != 1 and enabled = true and money < 0 order by money")
     Page<User> findUsersWithDebt(Pageable pageable);
 
+    User findByConfirmationToken(String token);
 }

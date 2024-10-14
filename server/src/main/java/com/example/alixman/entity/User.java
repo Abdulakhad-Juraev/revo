@@ -9,15 +9,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Entity(name = "users")
 public class User extends AbsEntity implements UserDetails {
     @Column(nullable = false)
@@ -31,6 +28,8 @@ public class User extends AbsEntity implements UserDetails {
     @ManyToOne(optional = false)
     private Role role;
 
+    private String email;
+    private String confirmationToken;
     public User(String firstName, String phone, String password, Role role) {
         this.firstName = firstName;
         this.phone = phone;
@@ -71,5 +70,10 @@ public class User extends AbsEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public User() {
+        // Tasdiqlash tokenini yaratish
+        this.confirmationToken = UUID.randomUUID().toString();
     }
 }

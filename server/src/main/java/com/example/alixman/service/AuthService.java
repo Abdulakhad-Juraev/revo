@@ -24,6 +24,9 @@ public class AuthService implements UserDetailsService {
     ApiResponseService apiResponseService;
 
     @Autowired
+    EmailService emailService;
+
+    @Autowired
     RoleRepository roleRepository;
 
     public UserDetails getUserById(UUID id) {
@@ -43,6 +46,8 @@ public class AuthService implements UserDetailsService {
         try {
             if (!userRepository.existsByPhoneEqualsIgnoreCase(userDto.getPhone())) {
                 User user = new User();
+//                String confirmationLink = "http://localhost:8080/confirm?token=" + userDto.getConfirmationToken();
+//                emailService.sendRegistrationConfirmation(userDto.getEmail());
                 user.setFirstName(userDto.getFirstName());
                 user.setPhone(userDto.getPhone());
                 user.setRole(roleRepository.findByRoleName(RoleName.valueOf(userDto.getRoleName())).orElseThrow(() -> new ResourceNotFoundException("getRole")));

@@ -75,4 +75,18 @@ public class AuthController {
         ApiResponse apiResponse = authService.addUser(userDto);
         return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
     }
+
+    @GetMapping("/confirm")
+    public String confirmRegistration(@RequestParam("token") String token) {
+
+        User user = userRepository.findByConfirmationToken(token);
+
+        if (user != null) {
+            userRepository.save(user);
+            return "Ro'yxatdan o'tish muvaffaqiyatli tasdiqlandi!";
+        } else {
+            return "Noto'g'ri yoki eskirgan tasdiqlash tokeni!";
+        }
+    }
+
 }
