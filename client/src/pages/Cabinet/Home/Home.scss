@@ -1,0 +1,76 @@
+.dashboard-statistic{
+  padding: 16px 14px;
+  border-radius: 4px;
+  color: #FFFFFF;
+
+  .dashboard-statistic-name {
+    font-size: 18px;
+    margin-bottom: 4px;
+    display: inline-block;
+  }
+  .dashboard-statistic-description {
+    font-size: 12px;
+    opacity: .7;
+    margin-bottom: 0;
+  }
+  .dashboard-statistic-price {
+    font-size: 24px!important;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+}
+.test1234{
+  font-size: calc(12px + 1.8vw);
+}
+
+.calendarIconHome {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+
+  .filterModal {
+    z-index: 99!important;
+    text-align: left;
+    position: absolute;
+    background: #fff;
+    left: -150px;
+    top: 25px;
+    box-shadow: 0 0 10px #cccccc;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: none;
+    width: 300px;
+  }
+
+  &:hover .filterModal{
+    display: block;
+  }
+
+}
+
+.dashboard-chart {
+  box-shadow: 0 0 5px #FD8602;
+  border-radius: 4px;
+}
+// Responsive Home Start
+
+@media only screen and (max-width: 600px){
+  .Home-Col-RP{
+    padding: 4px 0;
+  }
+  .Home-Dashboard{
+    overflow-x: scroll;
+    margin: 6px 0!important;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 768px){
+  .Home-Col-RP{
+    padding: 4px 0;
+  }
+  .Home-Dashboard{
+    margin: 6px 0!important;
+  }
+}
+
+// Responsive Home End

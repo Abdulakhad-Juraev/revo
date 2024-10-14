@@ -1,0 +1,247 @@
+.editButton {
+  display: block;
+  float: left;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      fill: #FD8602;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #FF8300, #FF5C00);
+
+    path {
+      fill: #ffffff;
+    }
+  }
+}
+
+.deleteButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      fill: #d9534f;
+      stroke: #d9534f;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #ea7889, #d9534f);
+
+    path {
+      fill: #ffffff;
+      stroke: #ffffff;
+    }
+  }
+}
+
+.viewButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      stroke: #0275d8;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #5CA6E5, #0275d8);
+
+    path {
+      stroke: #ffffff;
+    }
+  }
+}
+
+.refreshButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 34px;
+  height: 34px;
+  padding-top: 3px;
+
+  svg {
+    padding: 7px;
+    width: 34px;
+    height: 34px;
+    border-radius: 90px;
+
+    path {
+      stroke: #48C774;
+      fill: #48C774;
+    }
+  }
+
+  &:hover svg {
+    background-color: #48C774;
+    transform: rotate(180deg);
+    transition: 0.3s ease-in-out;
+
+    path {
+      stroke: #fff;
+      fill: #fff;
+    }
+  }
+}
+
+.viewOffButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      stroke: #424c54;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #859099, #424c54);
+
+    path {
+      stroke: #ffffff;
+    }
+  }
+}
+
+.checkButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      //stroke: #0275d8;
+      stroke: #259d04;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #37e707, #259d04);
+
+    path {
+      stroke: #ffffff;
+    }
+  }
+}
+
+.activeCheckButton {
+  svg {
+    background-image: linear-gradient(to bottom, #37e707, #259d04);
+
+    path {
+      stroke: #ffffff;
+    }
+  }
+}
+
+.table-tooltip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+
+  span {
+    position: absolute;
+    top: -43px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 3px;
+    color: #FFFFFF;
+    background: #FD8602;
+    display: none;
+  }
+
+  &:hover span {
+    display: block;
+  }
+
+}
+
+.currencyButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+
+    path {
+      stroke: #0275d8;
+      fill: #FFFFFF;
+    }
+  }
+
+  &:hover svg {
+    background-image: linear-gradient(to bottom, #5CA6E5, #0275d8);
+
+    path {
+      stroke: #ffffff;
+      fill: #FFFFFF;
+    }
+  }
+}
+
+.simpleButton {
+  float: left;
+  cursor: pointer;
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  svg {
+    padding: 7px;
+    width: 40px;
+    height: 40px;
+    border-radius: 90px;
+  }
+
+}

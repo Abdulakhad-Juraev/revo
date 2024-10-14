@@ -1,0 +1,26 @@
+package com.example.alixman.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import com.example.alixman.entity.template.AbsEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Attachment extends AbsEntity {
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String contentType;
+
+    @Column(nullable = false)
+    private Long size;
+
+}

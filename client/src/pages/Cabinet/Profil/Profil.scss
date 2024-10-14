@@ -1,0 +1,41 @@
+.profile {
+
+  .profile-user {
+
+    .profile-img {
+      width: 200px;
+      height: 200px;
+    }
+
+    .profile-header {
+
+      padding: 10px;
+      box-shadow: 0 0 5px #FD8602;
+      border-radius: 4px;
+
+      .col-md-5 {
+        p {
+          font-size: 18px;
+          font-weight: bold;
+        }
+      }
+
+      .col-md-7 {
+        p {
+          font-size: 18px!important;
+          font-weight: 500;
+        }
+
+        .description {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+.profil-res-div{
+  overflow-x: auto;
+}
+.profil-res-div2{
+  min-width: 400px;
+}

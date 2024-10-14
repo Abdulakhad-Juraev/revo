@@ -1,0 +1,161 @@
+import React, {Component} from 'react';
+import {connect} from "react-redux";
+import {getListAction, simpleAction} from "../../../redux/actionFuncs/mainActions";
+import {Container, Nav, NavItem, NavLink, Table} from "reactstrap";
+import SimpleModal from "../../../component/Modals/SimpleModal";
+import {showHideDeleteModal, showHideModal} from "../../../component/Modals/ModalFuncs";
+import DeleteModal from "../../../component/Modals/DeleteModal";
+import {checkStates} from "../../../utils/SecondaryFuncs/checkForm";
+import Header from "../../../component/Header/Header";
+import {DeleteButton, EditButton, ViewButton} from "../../../component/CustomComponents/CustomButtons";
+import Pagination from "react-js-pagination";
+import {searchListFun} from "../../../redux/actionFuncs/inputFuncs";
+import {orderAccountant, orderClient, orderSA, orderSeller, routeRole} from "../../../utils/SecondaryFuncs/nameOfRole";
+import {Link} from "react-router-dom";
+import {getNumberLLL} from "../../../utils/SecondaryFuncs/customDate";
+
+class Template extends Component {
+    componentDidMount() {
+        this.props.dispatch(getListAction({name: 'template'}))
+    }
+
+    handlePageChange(pageNumber) {
+        this.props.dispatch(getListAction({name : "template", page: (pageNumber - 1), size: this.props.size}))
+    }
+
+    state = {
+        customForm: [
+            {type: "hidden", element: "id"},
+            {type: "search", element: "name", placeHolder: "nomi"},
+            {type: "search", element: "width", placeHolder: "Bo'yi  / sm hisobida"},
+            {type: "search", element: "height", placeHolder: "Eni  / sm hisobida"},
+            {type: "search", element: "price", placeHolder: "Sotuv narxi => 1 kv/m uchun  (so'mda)"},
+        ]
+    }
+
+    render() {
+        const {
+            openModal,
+            deleteModal,
+            currentItem,
+            currentObject,
+            templateList,
+            dispatch,page,size,totalElements,currentUser
+        } = this.props
+
+        const sModal = (item) => {
+            dispatch(showHideModal(item, openModal))
+        }
+        const dModal = (item) => {
+            dispatch(showHideDeleteModal(item, deleteModal))
+        }
+
+        const saveItem = (e, v) => {
+            if (v.id !== ""){
+                checkStates(v,this.state,currentObject)
+            }
+            dispatch(simpleAction(v, {cAPI: "template", type: v.id !== '' ? "edit" : "save"}))
+        }
+
+        const deleteItem = () => {
+            dispatch(simpleAction(currentItem, {cAPI: "template", type: 'delete'}))
+        }
+
+        return (
+            <div>
+                <Container fluid className={"m-0 p-0"}>
+                    <Header title={"Mahsulotlar ro'yxati"} addModal={sModal} openModal={openModal}
+                            search={(e) => dispatch(searchListFun(e,"template"))} plus={orderSA(currentUser) || orderAccountant(currentUser)}/>
+                    <div className={"custom-res-div"}>
+                        <div className={"custom-res-div2"}>
+                            <Nav tabs  className={"bg-white"}>
+                                <NavItem className={"tab-item-style-active"}>
+                                    <NavLink>
+                                        <Link to={`/${routeRole(currentUser)}/product`} >
+                                            Ombor
+                                        </Link>
+                                    </NavLink>
+                                </NavItem>
+                                {orderSA(currentUser) || orderAccountant(currentUser) || orderSeller(currentUser) || orderClient(currentUser) ?
+                                    <NavItem className={"tab-item-style-default1"}>
+                                        <NavLink>
+                                            <Link to={`/${routeRole(currentUser)}/income`} >
+                                                Oyna olish
+                                            </Link>
+                                        </NavLink>
+                                    </NavItem> : ''
+                                }
+                                <NavItem className={"tab-item-style-default1"}>
+                                    <NavLink>
+                                        <Link to={`/${routeRole(currentUser)}/shipment`}>
+                                            Oyna sotish
+                                        </Link>
+                                    </NavLink>
+                                </NavItem>
+                            </Nav>
+                            <Table className={"bg-white"}>
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nomi</th>
+                                    <th>O'lcham</th>
+                                    <th>Narxi (1 kv/m uchun)</th>
+                                    <th colSpan={2} className={"text-center"}>Qoldiq (List / Kvadrat)</th>
+                                    <th>Amal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {templateList ? templateList.map((item,i) =>
+                                    <tr key={item.id ?? i}>
+                                        <th>{item.id ?? ""}</th>
+                                        <td>{item.name ?? ""}</td>
+                                        <td>{item.width + " x " + item.height + ", " + (item.size)}<sup> 2</sup></td>
+                                        <td>{item.price ?? ""} so'm</td>
+                                        <td className={"text-center"}>{item.listCount ?? ""} dona</td>
+                                        <td className={"text-center"}>{getNumberLLL(item.listSquare)} kv/m</td>
+                                        <td>
+                                            <Link to={`/${routeRole(currentUser)}/product/${item.id}`}>
+                                                <ViewButton />
+                                            </Link>
+                                            <EditButton fun={() => sModal(item)} />
+                                            {orderSA(currentUser) === true ? <DeleteButton fun={() => dModal(item.id)} /> : ""}
+                                        </td>
+                                    </tr>
+                                ) : ''}
+                                </tbody>
+                            </Table>
+                        </div>
+                    </div>
+                        <Pagination
+                            activePage={page + 1}
+                            itemsCountPerPage={size}
+                            totalItemsCount={totalElements}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)} itemClass="page-item"
+                            linkClass="page-link"
+                        />
+                </Container>
+
+                <SimpleModal onSubmit={saveItem} state={this.state}/>
+
+                <DeleteModal onSubmit={deleteItem}/>
+
+            </div>
+        );
+    }
+}
+
+Template.propTypes = {};
+
+export default connect(
+    ({
+         app: {
+             openModal, deleteModal, currentItem, currentObject,
+             templateList, attachmentId, attachmentUrl, attachments, categoryList, brandList, page,size,totalElements,totalPages
+         },
+         auth: {currentUser}
+     }) => ({
+        openModal, deleteModal, currentItem, currentObject,
+        templateList, attachmentId, attachmentUrl, attachments, categoryList, brandList, page,size,totalElements,totalPages, currentUser
+    })
+)(Template);

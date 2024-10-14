@@ -1,0 +1,33 @@
+.tab-item-style-active {
+  border-bottom: 2px solid #007BFF !important;
+  cursor: pointer;
+}
+.tab-item-style-active1 {
+  background-color: white;
+  cursor: pointer;
+}
+
+.tab-item-style-active:not(:first-child) {
+  margin: 0!important;
+}
+
+.tab-item-style-default:not(:first-child) {
+  margin: 0!important;
+  cursor: pointer;
+}
+.NavLink-hover{
+  font-size: 16px;
+  border: none!important;
+}
+.NavLink-hover:hover{
+  border: none;
+}
+.res-nav{
+  overflow-x: scroll;
+  &::-webkit-scrollbar{
+    display: none;
+  }
+}
+.nav-section{
+  min-width: 440px;
+}

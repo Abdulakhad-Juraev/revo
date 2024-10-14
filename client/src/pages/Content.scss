@@ -1,0 +1,34 @@
+.res-div {
+  position: relative;
+  padding: 10px;
+}
+
+.resp-div{
+  overflow-x: auto;
+}
+.resp-div2{
+  background-color: #fff;
+  min-width: 904px;
+}
+.custom-res-div{
+  overflow-x: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.custom-res-div2{
+  min-width: 904px;
+  margin-bottom: 50px;
+}
+
+@media only screen and (max-width: 768px) and (min-width: 300px) {
+  .res-div {
+    position: relative;
+    top: 90px;
+    padding: 10px;
+  }
+  .custom-res-div{
+
+    padding-top: 94px;
+  }
+}
