@@ -1,9 +1,7 @@
 package com.example.alixman.controller;
 
-import com.example.alixman.entity.Region;
 import com.example.alixman.entity.User;
 import com.example.alixman.payload.ApiResponse;
-import com.example.alixman.payload.RegionDto;
 import com.example.alixman.payload.UserDto;
 import com.example.alixman.repository.UserRepository;
 import com.example.alixman.security.CurrentUser;
@@ -12,11 +10,9 @@ import com.example.alixman.service.UserService;
 import com.example.alixman.utils.AppConstant;
 import com.example.alixman.utils.MessageConst;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

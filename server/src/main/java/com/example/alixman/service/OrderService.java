@@ -1,92 +1,109 @@
 package com.example.alixman.service;
 
 import com.example.alixman.entity.Order;
-import com.example.alixman.entity.Product;
-import com.example.alixman.entity.Shipment;
-import com.example.alixman.entity.enums.StatusOrder;
-import com.example.alixman.payload.*;
+import com.example.alixman.entity.Room;
+import com.example.alixman.entity.User;
 import com.example.alixman.repository.OrderRepository;
-import com.example.alixman.repository.ProductRepository;
-import com.example.alixman.repository.ProductTemplateRepository;
+import com.example.alixman.repository.RoomRepository;
 import com.example.alixman.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    ApiResponseService apiResponseService;
-    @Autowired
-    ProductTemplateRepository productTemplateRepository;
-    @Autowired
-    ProductRepository productRepository;
 
-    public Order addOrder(OrderDto orderDto) {
-        try {
-            Order order = new Order();
-            order.setProductTemplate(productTemplateRepository.findById(orderDto.getProductTemplateId()).orElseThrow(() -> new ResourceNotFoundException("getProductTemplate")));
-            order.setCount(orderDto.getCount());
-            Double getOrder = productRepository.getAllListCount(orderDto.getProductTemplateId()).orElseThrow(() -> new ResourceNotFoundException("getOrder"));
-            if (orderDto.getCount() <= getOrder) {
-                double limit = orderDto.getCount();
-                for (Product product : productRepository.getAllProductLeftOver(orderDto.getProductTemplateId())) {
-                    if (limit == 0) break;
-                    if (limit >= product.getLeftOver()) {
-                        product.setLeftOver(limit - product.getLeftOver());
-                    } else {
-                        product.setLeftOver(product.getLeftOver() - limit);
-                    }
+    @Autowired
+    private OrderRepository orderRepository;
 
-                    productRepository.save(product);
-                }
-            }
-            orderRepository.save(order);
-            return null;
-        } catch (Exception e) {
-            return null;
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Buyurtma yaratish
+    public Order createOrder(Order order, Integer roomId, UUID userId) {
+        // Xonani tekshirish
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found"));
+
+        // Foydalanuvchini tekshirish
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Buyurtma vaqtida xona bandmi yoki yo'qmi, tekshiramiz
+        boolean isRoomAvailable = checkRoomAvailability(room, order.getStartDate(), order.getEndDate());
+        if (!isRoomAvailable) {
+            throw new RuntimeException("Room is already booked for the selected dates");
         }
+
+        order.setRoom(room);
+        order.setUser(user);
+        order.setPaid(false); // Buyurtma dastlab to'lanmagan bo'ladi
+
+        return orderRepository.save(order);
     }
 
-    public ResPageable getOrderList(int page, int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Order> allOrder = orderRepository.findAll(pageable);
-            List<OrderDto> orderDtoList = new ArrayList<>();
-            for (int i = 0; i < allOrder.getContent().size(); i++) {
-                orderDtoList.add(
-                        getOne(allOrder.getContent().get(i))
-                );
-            }
-            return new ResPageable(
-                    page,
-                    size,
-                    allOrder.getTotalElements(),
-                    allOrder.getTotalPages(),
-                    allOrder.getContent().stream().map(this::getOne));
-        } catch (Exception e) {
-            return null;
+    // Xonaning band emasligini tekshirish
+    private boolean checkRoomAvailability(Room room, LocalDate startDate, LocalDate endDate) {
+        List<Order> existingOrders = orderRepository.findByRoomAndDates(room.getId(), startDate, endDate);
+        return existingOrders.isEmpty();
+    }
+
+    // Barcha buyurtmalarni olish
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    // Buyurtmani ID bo'yicha olish
+    public Order getOrderById(Integer id) {
+        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+    // Buyurtmani yangilash (faqat to'lov holatini yangilash kabi)
+    public Order updateOrder(Integer id, Order orderDetails) {
+        Order order = getOrderById(id);
+
+        order.setPaid(orderDetails.isPaid());
+        // Qo'shimcha o'zgarishlar kiritish mumkin (startDate yoki endDate kabi)
+
+        return orderRepository.save(order);
+    }
+
+    // Buyurtmani o'chirish
+    public void deleteOrder(Integer id) {
+        Order order = getOrderById(id);
+        orderRepository.delete(order);
+    }
+
+    // Foydalanuvchi buyurtmalarini olish
+    public List<Order> getOrdersByUser(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return orderRepository.findByUser(user);
+    }
+
+    // Xonaga bo'lgan barcha buyurtmalarni olish
+    public List<Order> getOrdersByRoom(Integer roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found"));
+
+        return orderRepository.findByRoom(room);
+    }
+
+    public Order rateOrder(Integer orderId, Integer rating, String comment) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (rating != null && (rating < 1 || rating > 5)) {
+            throw new RuntimeException("Rating must be between 1 and 5");
         }
+
+        order.setRating(rating);
+        order.setComment(comment);
+
+        return orderRepository.save(order);
     }
-
-    public OrderDto getOne(Order order) {
-        return new OrderDto(
-                order.getId(),
-                order.getProductTemplate(),
-                order.getCount()
-        );
-    }
-
-
 }
+

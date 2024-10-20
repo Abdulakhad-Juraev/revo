@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -45,9 +46,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
         private List<String> handledExtensions = Arrays.asList("html", "js", "json", "csv", "css", "png", "svg", "eot", "ttf", "otf", "woff", "appcache", "jpg", "jpeg", "gif", "ico");
         private List<String> ignoredPaths = Collections.singletonList("api");
 
+//        @Override
+//        public Resource resolveResource(HttpServletRequest request, String requestPath, List<? extends Resource> locations, ResourceResolverChain chain) {
+//            return resolve(requestPath, locations);
+//        }
         @Override
         public Resource resolveResource(HttpServletRequest request, String requestPath, List<? extends Resource> locations, ResourceResolverChain chain) {
-            return resolve(requestPath, locations);
+            return Optional.ofNullable(chain.resolveResource(request, requestPath, locations))
+                    .orElseGet(() -> {
+                        // Log yoki boshqa harakatlar kiriting
+                        return null; // or some default Resource
+                    });
         }
 
         @Override
@@ -94,6 +103,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             String extension = StringUtils.getFilenameExtension(path);
             return handledExtensions.stream().anyMatch(ext -> ext.equals(extension));
         }
+
     }
 
 }

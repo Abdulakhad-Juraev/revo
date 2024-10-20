@@ -4,7 +4,6 @@ import com.example.alixman.entity.User;
 import com.example.alixman.payload.ApiResponse;
 import com.example.alixman.payload.JwtToken;
 import com.example.alixman.payload.ReqLogin;
-import com.example.alixman.payload.UserDto;
 import com.example.alixman.repository.UserRepository;
 import com.example.alixman.security.CurrentUser;
 import com.example.alixman.security.JwtTokenProvider;
@@ -39,15 +38,17 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
     @Autowired
     UserService userService;
-
     @PostMapping("/login")
     private HttpEntity<?> login(@Valid @RequestBody ReqLogin reqLogin) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(reqLogin.getPhone(), reqLogin.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(reqLogin.getPhone(), reqLogin.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = (User) authentication.getPrincipal();
             String token = jwtTokenProvider.generateToken(user);
-            return ResponseEntity.status(200).body(new ApiResponse(MessageConst.LOGIN_SUCCESS, true, new JwtToken(token)));
+            return ResponseEntity
+                    .status(200)
+                    .body(new ApiResponse(MessageConst.LOGIN_SUCCESS, true, new JwtToken(token)));
         } catch (Exception e) {
             return ResponseEntity.status(401).body(new ApiResponse(MessageConst.LOGIN_ERROR, false));
         }
@@ -61,32 +62,12 @@ public class AuthController {
 
 
     @GetMapping("/encoder/{password}")
-    public String encodePassword(@PathVariable String password) {
+    public String encodePassword(@PathVariable String password){
         return passwordEncoder.encode(password);
     }
 
     @GetMapping("/roles")
-    public HttpEntity<?> getRoles() {
-        return ResponseEntity.ok(new ApiResponse(MessageConst.GET_SUCCESS, true, userService.getRoleNames()));
+    public HttpEntity<?> getRoles(){
+        return ResponseEntity.ok(new ApiResponse(MessageConst.GET_SUCCESS,true,userService.getRoleNames()));
     }
-
-    @PostMapping("/register")
-    public HttpEntity<?> register(@RequestBody UserDto userDto) {
-        ApiResponse apiResponse = authService.addUser(userDto);
-        return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
-    }
-
-    @GetMapping("/confirm")
-    public String confirmRegistration(@RequestParam("token") String token) {
-
-        User user = userRepository.findByConfirmationToken(token);
-
-        if (user != null) {
-            userRepository.save(user);
-            return "Ro'yxatdan o'tish muvaffaqiyatli tasdiqlandi!";
-        } else {
-            return "Noto'g'ri yoki eskirgan tasdiqlash tokeni!";
-        }
-    }
-
 }

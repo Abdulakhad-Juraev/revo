@@ -1,9 +1,7 @@
 package com.example.alixman.component;
 
-import com.example.alixman.entity.Region;
 import com.example.alixman.entity.User;
 import com.example.alixman.entity.enums.RoleName;
-import com.example.alixman.repository.RegionRepository;
 import com.example.alixman.repository.RoleRepository;
 import com.example.alixman.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

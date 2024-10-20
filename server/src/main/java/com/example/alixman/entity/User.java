@@ -14,7 +14,7 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @Entity(name = "users")
 public class User extends AbsEntity implements UserDetails {
     @Column(nullable = false)
@@ -23,13 +23,14 @@ public class User extends AbsEntity implements UserDetails {
     @Column(nullable = false)
     private String phone;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
     private String password;
 
     @ManyToOne(optional = false)
     private Role role;
 
-    private String email;
-    private String confirmationToken;
     public User(String firstName, String phone, String password, Role role) {
         this.firstName = firstName;
         this.phone = phone;
@@ -70,10 +71,5 @@ public class User extends AbsEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public User() {
-        // Tasdiqlash tokenini yaratish
-        this.confirmationToken = UUID.randomUUID().toString();
     }
 }

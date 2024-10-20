@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,8 +15,12 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @Entity
 public class Category extends AbsNameEntity {
-    private boolean active;
-    @OneToOne
-    private Attachment attachment;
+
+    @Column(nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "category")
+    private List<Room> rooms;
+
 }
+

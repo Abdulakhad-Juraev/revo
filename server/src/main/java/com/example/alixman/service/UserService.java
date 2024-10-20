@@ -1,22 +1,18 @@
 package com.example.alixman.service;
 
-import com.example.alixman.entity.Contact;
 import com.example.alixman.entity.Role;
 import com.example.alixman.entity.User;
 import com.example.alixman.entity.enums.RoleName;
 import com.example.alixman.payload.ApiResponse;
 import com.example.alixman.payload.ResPageable;
 import com.example.alixman.payload.UserDto;
-import com.example.alixman.repository.ContactRepository;
 import com.example.alixman.repository.RoleRepository;
 import com.example.alixman.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +29,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ContactService contactService;
-    @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    ContactRepository contactRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
 

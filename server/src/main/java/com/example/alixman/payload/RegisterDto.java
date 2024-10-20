@@ -1,12 +1,8 @@
 package com.example.alixman.payload;
 
-import com.example.alixman.entity.Attachment;
-import com.example.alixman.entity.Role;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -31,7 +27,6 @@ public class RegisterDto {
 //    )
     @NotBlank
     private String prePassword;
-    private ContactDto contactDto;
     private UUID attachmentId;
     private String description;
     private boolean active;

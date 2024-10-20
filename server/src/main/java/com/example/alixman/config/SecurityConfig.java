@@ -43,25 +43,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtTokenFilter();
     }
 
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//
+//                .exceptionHandling()
+//                .authenticationEntryPoint(jwtErrors)
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/api/auth/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .csrf().disable();
+//
+//
+//        http.addFilterBefore(filter(), UsernamePasswordAuthenticationFilter.class);
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtErrors)
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .csrf().disable();
-
-
-        http.addFilterBefore(filter(), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll();
     }
 }
